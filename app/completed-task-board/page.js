@@ -11,7 +11,7 @@ export default function Page() {
 
             <header className="text-center py-6">
                 <h1 className="text-3xl font-bold">
-                    Task Board
+                    Completed Task Board
                 </h1>
             </header>
 
@@ -21,5 +21,5 @@ export default function Page() {
 }
 
 export const metadata = {
-    title: "Task Board",
+    title: "Completed Task Board",
 };

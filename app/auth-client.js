@@ -20,13 +20,13 @@ export default function AuthClient() {
     return (
         <div className="m-4">
             {user ? (
-                <div className="flex flex-col gap-4 max-w-xs">
-                    <span>Signed in as {user.displayName}</span>
-                    <a className="text-lg hover:underline" href="/task-board">Continue to your Shopping List</a>
-                    <button className="bg-blue-500 p-2 rounded-lg text-align" onClick={() => firebaseSignOut()}>Sign out</button>
+                <div className="flex flex-col items-center gap-4 p-6 border rounded-lg shadow-lg bg-white">
+                    <span className="text-gray-700">Signed in as {user.displayName}</span>
+                    <a className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg text-center" href="/task-board">Continue to your Task Board</a>
+                    <button className="text-gray-600 hover:text-gray-800 py-1 px-4 rounded-lg border border-gray-300" onClick={() => firebaseSignOut()}>Sign out</button>
                 </div>
             ) : (
-                <button className="bg-blue-500 p-2 rounded-lg text-align" onClick={handleSignIn} disabled={loading}>
+                <button className="bg-gray-300 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-200" onClick={handleSignIn} disabled={loading}>
                     {loading ? "Signing in…" : "Sign in with GitHub"}
                 </button>
             )}

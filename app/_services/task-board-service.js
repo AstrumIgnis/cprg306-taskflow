@@ -1,25 +1,43 @@
 import { db } from "../_utils/firebase";
-import { where, collection, getDocs, addDoc, query } from "firebase/firestore";
+import { where, collection, getDocs, addDoc, query, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 
 
-export async function getItems(userId) {
+export async function getTasks(userId) {
     const q = query(
-        collection(db, "users", userId, "tasks")
-        //Add extra rules here later
+        collection(db, "users", userId, "tasks"),
+        where("completed", "==", false)
     );
 
-    const tasksSnapshot = await getDocs(q);
+    const snapshot = await getDocs(q);
 
-    const tasks = [];
-    tasksSnapshot.forEach((doc) => {
-        tasks.push({
-            id: doc.id,
-            ...doc.data()
-        });
+    return snapshot.docs.map(doc => ({
+        firestoreId: doc.id,
+        ...doc.data()
+    }));
+}
+
+export async function completeTask(userId, firestoreId) {
+    const taskRef = doc(db, "users", userId, "tasks", firestoreId);
+
+    await updateDoc(taskRef, {
+        completed: true,
+        completionDate: new Date().toISOString()
     });
+}
 
-    return tasks;
+export async function getCompletedTasks(userId) {
+    const q = query(
+        collection(db, "users", userId, "tasks"),
+        where("completed", "==", true)
+    );
+
+    const snapshot = await getDocs(q);
+
+    return snapshot.docs.map(doc => ({
+        firestoreId: doc.id,
+        ...doc.data()
+    }));
 }
 
 export async function addTask(userId, task) {
@@ -27,4 +45,9 @@ export async function addTask(userId, task) {
     const docRef = await addDoc(colRef, task);
 
     return docRef.id;
+}
+
+export async function deleteTask(userId, taskId) {
+    const taskRef = doc(db, "users", userId, "tasks", taskId);
+    await deleteDoc(taskRef);
 }
